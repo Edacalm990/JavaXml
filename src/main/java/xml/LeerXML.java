@@ -45,4 +45,23 @@ public class LeerXML {
 
         listaFactura.forEach(System.out::println);
     }
+
+    public static ArrayList<Factura> leerfactura(String ruta) {
+        ArrayList<Factura> listaFactura= new ArrayList<>();
+        try {
+            // Crea el contexto JAXB 
+            JAXBContext contexto = JAXBContext.newInstance(CatalogoFactura.class);
+            // Crea el objeto Unmarshaller
+            Unmarshaller um = contexto.createUnmarshaller();
+
+            // Llama al método de unmarshalling
+            CatalogoFactura catalogo = (CatalogoFactura) um.unmarshal(new File(ruta));
+
+            listaFactura = catalogo.getListaFactura();
+
+            listaFactura.forEach(System.out::println);
+        } catch (Exception e) {
+        }
+        return listaFactura;
+    }
 }

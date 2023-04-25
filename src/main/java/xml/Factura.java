@@ -7,6 +7,10 @@ package xml;
 import java.time.LocalDate;
 import java.util.Random;
 import java.util.stream.DoubleStream;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.commons.lang3.RandomStringUtils;
 
 /**
@@ -23,12 +27,21 @@ El constructor por defecto inicializa los atributos de forma aleatoria, siguiend
     La descripción será un string aleatorio.
     El importe total estará entre 100€ y 1000€. Para asignar este importe debes generar un DoubleStream 
 de tamaño 1 usando el método doubles(int tamañoStream, double valorInicial, double valorFinal) de la clase Random.
-*/
-
-
+ */
+// Anotación @XmlRootElement, nombre de la etiqueta XML raíz.
+@XmlRootElement(name = "factura")
+// Anotación @XmlAccesorType define el elemento que usará JAXB durante el 
+// procesamiento de datos (en este caso por atributo)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Factura {
-    private static int contador=0;
+
+    private static int contador = 0;
     private static Random random = new Random();
+    private String codigoUnico;
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
+    private LocalDate fechaEmision;
+    private String descripcion;
+    private double totalImporteFactura;
 
     public static void setContador(int aContador) {
         contador = aContador;
@@ -37,11 +50,6 @@ public class Factura {
     public static void setRandom(Random aRandom) {
         random = aRandom;
     }
-
-    private String codigoUnico;
-    private LocalDate fechaEmision;
-    private String descripcion;
-    private double totalImporteFactura;
 
     public Factura() {
         this.codigoUnico = String.valueOf(Factura.contador++);
@@ -72,7 +80,7 @@ public class Factura {
     public double getTotalImporteFactura() {
         return totalImporteFactura;
     }
-    
+
     public static Random getRandom() {
         return random;
     }
@@ -95,10 +103,7 @@ public class Factura {
 
     @Override
     public String toString() {
-        return "%s;%s;%s;%s".formatted(this.codigoUnico,this.descripcion,this.fechaEmision,this.totalImporteFactura);
+        return "%s;%s;%s;%s".formatted(this.codigoUnico, this.descripcion, this.fechaEmision, this.totalImporteFactura);
     }
-    
-    
-    
-    
+
 }
